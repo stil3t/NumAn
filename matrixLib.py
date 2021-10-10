@@ -37,7 +37,7 @@ def matrixInput(fast = False):
           try:
             row.append(float(elem))
           except ValueError:
-            assert re.fullmatch(r'[a-zA-Zа-яА-Я]', elem), 'Неверный ввод'
+            assert re.fullmatch(r'[-]?[a-zA-Zа-яА-Я]', elem), 'Неверный ввод'
             row.append(elem)
 
       matrix.append(row)
@@ -78,18 +78,20 @@ def matrixShape(matrix):
   return len(matrix), len(matrix[0])
 
 def Transpose1(matrix):
-  """Транспонирует матрицу matrix"""
-
+  """Транспонирует матрицу matrix, используя генератор"""
   try:
     n, m = matrixShape(matrix)
   except:
     print('Не матрица')
   return [[matrix[x, y] for x in range(n)] for y in range(m)]
 
-def Transpose(matrix):
+def Transpose2(matrix):
+  """Транспонирует матрицу, используя zip()"""
   return [list(i) for i in zip(*matrix)]
 
-Transpose2 = Transpose
+Transpose = Transpose2
+# Тесты показали, что метод, использующий zip(), быстрее
+# В будущем именно он будет использоваться как основной
 
 def red(matrix, y, x):
   """Возвращает матрицу с удаленной строкой y и столбцом x.
@@ -108,7 +110,7 @@ def red(matrix, y, x):
   return res
 
 def det1(matrix):
-  """Нахождение определителя квадратной матрицы"""
+  """Нахождение определителя квадратной матрицы, рекурсия до матрицы рангом 1"""
   assert matrixShape(matrix)[0]==matrixShape(matrix)[1], 'Матрица должна быть квадратной'
   n = matrixShape(matrix)[0]
 
@@ -121,7 +123,7 @@ def det1(matrix):
     return res
 
 def det2(matrix):
-  """Нахождение определителя квадратной матрицы"""
+  """Нахождение определителя квадратной матрицы, рекурсия до матрицы рангом 2"""
   assert matrixShape(matrix)[0]==matrixShape(matrix)[1], 'Матрица должна быть квадратной'
   n = matrixShape(matrix)[0]
 
@@ -136,7 +138,7 @@ def det2(matrix):
     return res
 
 def det3(matrix):
-  """Нахождение определителя квадратной матрицы"""
+  """Нахождение определителя квадратной матрицы, рекурсия до матрицы рангом 3"""
   assert matrixShape(matrix)[0]==matrixShape(matrix)[1], 'Матрица должна быть квадратной'
   n = matrixShape(matrix)[0]
 
@@ -155,7 +157,7 @@ def det3(matrix):
     return res
 
 def det4(matrix):
-  """Нахождение определителя квадратной матрицы"""
+  """Нахождение определителя квадратной матрицы, рекурсия до матрицы рангом 4"""
   assert matrixShape(matrix)[0]==matrixShape(matrix)[1], 'Матрица должна быть квадратной'
   n = matrixShape(matrix)[0]
 
@@ -180,3 +182,5 @@ def det4(matrix):
     return res
 
 det = det3
+# Тесты времени выполнения показали, что функция det3 быстрее det1 и det2, но det4 выигрыша по времени не дает.
+# Далее det3 будет использоватсья как функция по умолчанию для расчета определителя матрицы
