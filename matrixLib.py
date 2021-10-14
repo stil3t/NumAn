@@ -93,21 +93,7 @@ Transpose = Transpose2
 # Тесты показали, что метод, использующий zip(), быстрее
 # В будущем именно он будет использоваться как основной
 
-def red(matrix, y, x):
-  """Возвращает матрицу с удаленной строкой y и столбцом x.
-  Нужно для вычисления определителя больших матриц"""
-  n, m = matrixShape(matrix)
-  res = []
 
-  for nn in range(n):
-    if nn == y: continue
-    current_row = []
-    for mm in range(m):
-      if mm == x: continue
-      current_row.append(matrix[nn][mm])
-    res.append(current_row)
-
-  return res
 
 def det1(matrix):
   """Нахождение определителя квадратной матрицы, рекурсия до матрицы рангом 1"""
