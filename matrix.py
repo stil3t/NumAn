@@ -180,14 +180,14 @@ class Matrix(object):
             return Matrix([[self.M[nn][mm] + other.M[nn][mm] for mm in range(self.m)] for nn in range(self.n)])
 
     def __sub__(self, other):
-        if type(other) in ['float', 'int']:
+        if type(other) in [float, int]:
             return Matrix([[self.M[nn][mm] - other for mm in range(self.m)] for nn in range(self.n)])
-        elif type(other) == 'matrix.Matrix':
+        elif type(other) == Matrix:
             assert self.n == other.n and self.m == other.m, "different sizes"
             return Matrix([[self.M[nn][mm] - other.M[nn][mm] for mm in range(self.m)] for nn in range(self.n)])
 
     def __mul__(self, other):
-        if type(other) in ['float', 'int']:
+        if type(other) in [float, int]:
             return Matrix([[self.M[nn][mm] * other for mm in range(self.m)] for nn in range(self.n)])
         elif type(other) == Matrix:
             assert self.m == other.n, "Умножение матриц невозможно"
