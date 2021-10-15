@@ -1,5 +1,6 @@
 import matrix
-mat = matrix.ints(2, 2)
-print(mat)
-print(mat.T())
-print(mat + mat.T())
+A = matrix.ints(1, 2)
+B = matrix.ints(2, 3)
+print(A)
+print(B)
+print(A*B)

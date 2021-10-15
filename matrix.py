@@ -186,4 +186,21 @@ class Matrix(object):
             assert self.n == other.n and self.m == other.m, "different sizes"
             return Matrix([[self.M[nn][mm] - other.M[nn][mm] for mm in range(self.m)] for nn in range(self.n)])
 
-    # def __mult__!!
+    def __mul__(self, other):
+        if type(other) in ['float', 'int']:
+            return Matrix([[self.M[nn][mm] * other for mm in range(self.m)] for nn in range(self.n)])
+        elif type(other) == Matrix:
+            assert self.m == other.n, "Умножение матриц невозможно"
+            res = []
+            for i in range(self.n):
+                row = []
+                for j in range(other.m):
+                    x = 0
+                    for z in range(self.m):
+                        x += self.M[i][z] * other.M[z][j]
+                    row.append(x)
+                res.append(row)
+            return res
+
+
+
