@@ -119,13 +119,14 @@ def det_lst(matrix):
     else:
         res = 0
         for mm in range(n):
-            res += ((-1) ** mm) * (matrix[0][mm]) * det(red(matrix, 0, mm))
+            res += ((-1) ** mm) * (matrix[0][mm]) * det_lst(red(matrix, 0, mm))
         return res
 
 
 def T_lst(lst):
     """Транспонирует матрицу, используя zip()"""
     return [list(i) for i in zip(*lst)]
+
 
 
 class Matrix(object):
@@ -214,7 +215,28 @@ class Matrix(object):
         res = Matrix(res) * (1 / self.det())
         return res
 
+    def Cond(self):
+        """Расчет числа обсуловленности"""
+        return abs(self.det())*abs(self.inv().det())
+
+    def add(self, B):
+        """Приписывает вектор В к матрице"""
+        if type(B) == list:
+            B = Matrix(B).T()
+
+        if B.n != self.n:
+            B = B.T()
+        assert B.n == self.n, 'Неверный размер вектора'
+
+        for i in range(self.n):
+            self.M[i].append(B.M[i][0])
+
+        return self
+
+
 
 def solve(A, B):
     """Решает матричное уравнение A*X = B"""
+    assert A.n == A.m, 'Матрица А должна быть квадратной'
+
     return A.inv() * B
