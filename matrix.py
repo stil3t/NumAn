@@ -75,6 +75,7 @@ def red(matrix, y, x):
     Нужно для вычисления определителя больших матриц"""
 
     res = []
+    n, m = matrixShape(matrix)
 
     for nn in range(n):
         if nn == y: continue
@@ -95,7 +96,12 @@ def matrixShape(matrix):
     return n, m
 
 
-def det(matrix):
+def E(n):
+    """Единичаня матрица размера n*n"""
+    res = [[0 if i != j else 1 for i in range(n)] for j in range(n)]
+    return Matrix(res)
+
+def det_lst(matrix):
     """Нахождение определителя квадратной матрицы, рекурсия до матрицы рангом 3"""
     assert matrixShape(matrix)[0] == matrixShape(matrix)[1], 'Матрица должна быть квадратной'
     n = matrixShape(matrix)[0]
@@ -117,19 +123,18 @@ def det(matrix):
         return res
 
 
+def T_lst(lst):
+    """Транспонирует матрицу, используя zip()"""
+    return [list(i) for i in zip(*lst)]
+
+
 class Matrix(object):
     """Класс матрицы, n строк, m столбцов"""
     M = []
     detM = None
 
-
     def __init__(self, matrix):
-        try:
-            self.n = len(matrix)
-            self.m = len(matrix[0])
-        except:
-            Exception("List of list expected")
-
+        self.n, self.m = matrixShape(matrix)
         self.M = [[matrix[nn][mm] for mm in range(self.m)] for nn in range(self.n)]
 
     def __call__(self):
@@ -142,7 +147,7 @@ class Matrix(object):
     def shape(self):
         return self.n, self.m
 
-    def piece(self, y, x, asList = False):
+    def piece(self, y, x, asList=False):
         """Возвращает матрицу с удаленной строкой y и столбцом x.
         Нужно для вычисления определителя больших матриц"""
         n, m = self.n, self.m
@@ -164,7 +169,7 @@ class Matrix(object):
     def det(self):
         """Определитель матрицы"""
         if self.detM is None:
-            self.detM = det(self.M)
+            self.detM = det_lst(self.M)
         return self.detM
 
     def T(self):
@@ -202,5 +207,14 @@ class Matrix(object):
                 res.append(row)
             return res
 
+    def inv(self):
+        assert self.det() != 0, 'Определитель равен 0, обратная матрица не существует'
+        res = [[det_lst(red(self.M, x, y)) * -((x + y) % 2 * 2 - 1) for x in range(self.m)] for y in range(self.n)]
+        # чтобы избежать лишнего вызова функции транспонирования, я поменял местами аргументы функции red
+        res = Matrix(res) * (1 / self.det())
+        return res
 
 
+def solve(A, B):
+    """Решает матричное уравнение A*X = B"""
+    return A.inv() * B
