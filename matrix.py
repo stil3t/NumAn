@@ -246,6 +246,9 @@ class Matrix(object):
             for elem in string:
                 norm2 += elem ** 2
         return sqrt(norm2)
+    
+    def get_M(self):
+        return self.M
 
 
 def solve(A, B):
@@ -253,3 +256,26 @@ def solve(A, B):
     assert A.n == A.m, 'Матрица А должна быть квадратной'
 
     return A.inv() * B
+
+
+def jordan_gauss(A):
+    """Решает СЛАУ методом Гаусса-Жордана"""
+    A1 = A.get_M()
+    for cnt in range(A.n):
+        for i in range(A.n):
+            d = A1[i][cnt]
+            for j in range(cnt, A.m):
+                if i == cnt:
+                    A1[i][j] = A1[i][j] / d
+        for i in range(A.n):
+            d = A1[i][cnt]
+            for j in range(cnt, A.m):
+                if i != cnt:
+                    A1[i][j] = A1[i][j] - A1[cnt][j] * d
+    return A.M, A1
+
+
+A = Matrix([[5, 2, 7], [2, 1, 9]]) # x1 = -11; x2 = 31
+a, b = jordan_gauss(A)
+print(a)
+print(b)
