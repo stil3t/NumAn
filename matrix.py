@@ -232,7 +232,23 @@ class Matrix(object):
             self.M[i].append(B.M[i][0])
 
         return self
-
+    
+    def norm1(self):
+        """Рассчитывает максимум суммы модулей элементов в строке"""
+        norm1 = 0
+        for string in self.M:
+            for index in range(len(string)):
+                string[index] = abs(string[index])
+            norm1 = max(norm1, sum(string))
+        return norm1
+    
+    def norm2(self):
+        """Рассчитывает квадратный корень из суммы квадратов элементов"""
+        norm2 = 0
+        for string in self.M:
+            for elem in string:
+                norm2 += elem**2
+        return sqrt(norm2)
 
 
 def solve(A, B):
