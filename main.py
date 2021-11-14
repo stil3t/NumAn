@@ -1,4 +1,4 @@
-import matrix
+import matrix as m
 from numpy import *
 import interpolation as i
 import itertools
@@ -32,4 +32,9 @@ import itertools
 
 # i.generateDataInRange(lambda x: sin(x) - 4, 0, 8, .5, .2, buildPlot=True)
 
-print(itertools.combinations_with_replacement([0, 0, 1, 1]))
+A = m.generate(3, 3)
+B = m.ints(3, 3)
+print(B)
+print(B.det())
+# print(A.norm1(), A.norm2())
+# print(A.Cond())

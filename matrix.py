@@ -101,6 +101,7 @@ def E(n):
     res = [[0 if i != j else 1 for i in range(n)] for j in range(n)]
     return Matrix(res)
 
+
 def det_lst(matrix):
     """Нахождение определителя квадратной матрицы, рекурсия до матрицы рангом 3"""
     assert matrixShape(matrix)[0] == matrixShape(matrix)[1], 'Матрица должна быть квадратной'
@@ -128,11 +129,9 @@ def T_lst(lst):
     return [list(i) for i in zip(*lst)]
 
 
-
 class Matrix(object):
     """Класс матрицы, n строк, m столбцов"""
     M = []
-    detM = None
 
     def __init__(self, matrix):
         self.n, self.m = matrixShape(matrix)
@@ -169,9 +168,7 @@ class Matrix(object):
 
     def det(self):
         """Определитель матрицы"""
-        if self.detM is None:
-            self.detM = det_lst(self.M)
-        return self.detM
+        return det_lst(self.M)
 
     def T(self):
         """Транспонирует матрицу, используя zip()"""
@@ -210,14 +207,14 @@ class Matrix(object):
 
     def inv(self):
         assert self.det() != 0, 'Определитель равен 0, обратная матрица не существует'
-        res = [[det_lst(red(self.M, x, y)) * -((x + y) % 2 * 2 - 1) for x in range(self.m)] for y in range(self.n)]
+        res = Matrix([[det_lst(red(self.M, x, y)) * -((x + y) % 2 * 2 - 1) for x in range(self.m)] for y in range(self.n)])
         # чтобы избежать лишнего вызова функции транспонирования, я поменял местами аргументы функции red
-        res = Matrix(res) * (1 / self.det())
+        res = res * (1 / self.det())
         return res
 
     def Cond(self):
         """Расчет числа обсуловленности"""
-        return abs(self.det())*abs(self.inv().det())
+        return abs(self.norm1()) * abs(self.inv().norm1())
 
     def add(self, B):
         """Приписывает вектор В к матрице"""
@@ -232,7 +229,7 @@ class Matrix(object):
             self.M[i].append(B.M[i][0])
 
         return self
-    
+
     def norm1(self):
         """Рассчитывает максимум суммы модулей элементов в строке"""
         norm1 = 0
@@ -241,13 +238,13 @@ class Matrix(object):
                 string[index] = abs(string[index])
             norm1 = max(norm1, sum(string))
         return norm1
-    
+
     def norm2(self):
         """Рассчитывает квадратный корень из суммы квадратов элементов"""
         norm2 = 0
         for string in self.M:
             for elem in string:
-                norm2 += elem**2
+                norm2 += elem ** 2
         return sqrt(norm2)
 
 
