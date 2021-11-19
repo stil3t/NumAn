@@ -206,11 +206,13 @@ class Matrix(object):
             return res
 
     def inv(self):
-        assert self.det() != 0, 'Определитель равен 0, обратная матрица не существует'
-        res = Matrix([[det_lst(red(self.M, x, y)) * -((x + y) % 2 * 2 - 1) for x in range(self.m)] for y in range(self.n)])
-        # чтобы избежать лишнего вызова функции транспонирования, я поменял местами аргументы функции red
-        res = res * (1 / self.det())
-        return res
+        # по непонятным причинам функция работает некорректно. временно замено на библиотечную
+        # assert self.det() != 0, 'Определитель равен 0, обратная матрица не существует'
+        # res = [[det_lst(red(self.M, x, y)) * -((x + y) % 2 * 2 - 1) for x in range(self.m)] for y in range(self.n)]
+        # # чтобы избежать лишнего вызова функции транспонирования, я поменял местами аргументы функции red
+        # res = Matrix(res) * (1 / self.det())
+        # return res
+        return Matrix(np.linalg.inv(self.M))
 
     def Cond(self):
         """Расчет числа обсуловленности"""
@@ -248,7 +250,7 @@ class Matrix(object):
         return sqrt(norm2)
     
     def get_M(self):
-        return self.M
+        return self.M.copy()
 
 
 def solve(A, B):
@@ -272,10 +274,5 @@ def jordan_gauss(A):
             for j in range(cnt, A.m):
                 if i != cnt:
                     A1[i][j] = A1[i][j] - A1[cnt][j] * d
-    return A.M, A1
+    return A, A1
 
-
-A = Matrix([[5, 2, 7], [2, 1, 9]]) # x1 = -11; x2 = 31
-a, b = jordan_gauss(A)
-print(a)
-print(b)
