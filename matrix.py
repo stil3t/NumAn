@@ -248,7 +248,7 @@ class Matrix(object):
             for elem in string:
                 norm2 += elem ** 2
         return sqrt(norm2)
-    
+
     def get_M(self):
         return self.M.copy()
 
@@ -274,5 +274,7 @@ def jordan_gauss(A):
             for j in range(cnt, A.m):
                 if i != cnt:
                     A1[i][j] = A1[i][j] - A1[cnt][j] * d
-    return A, A1
-
+    x_answer = []
+    for item in A1:
+        x_answer.append(item[-1])
+    return x_answer
