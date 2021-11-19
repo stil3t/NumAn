@@ -205,14 +205,20 @@ class Matrix(object):
                 res.append(row)
             return res
 
+    def merge(self, other):
+        res = self.get_M()
+        for i in range(other.n):
+            res[i].append(other.M[i][0])
+        return Matrix(res)
+
+
     def inv(self):
-        # по непонятным причинам функция работает некорректно. временно замено на библиотечную
-        # assert self.det() != 0, 'Определитель равен 0, обратная матрица не существует'
-        # res = [[det_lst(red(self.M, x, y)) * -((x + y) % 2 * 2 - 1) for x in range(self.m)] for y in range(self.n)]
-        # # чтобы избежать лишнего вызова функции транспонирования, я поменял местами аргументы функции red
-        # res = Matrix(res) * (1 / self.det())
-        # return res
-        return Matrix(np.linalg.inv(self.M))
+        assert self.det() != 0, 'Определитель равен 0, обратная матрица не существует'
+        res = [[det_lst(red(self.M, x, y)) * -((x + y) % 2 * 2 - 1) for x in range(self.m)] for y in range(self.n)]
+        # чтобы избежать лишнего вызова функции транспонирования, я поменял местами аргументы функции red
+        res = Matrix(res) * (1 / self.det())
+        return res
+        # return Matrix(np.linalg.inv(self.M))
 
     def Cond(self):
         """Расчет числа обсуловленности"""

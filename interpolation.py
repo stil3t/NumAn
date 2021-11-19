@@ -21,16 +21,3 @@ def generateDataInRange(func, start, stop, step, disp=0, buildPlot=False):
 
     return {X[i]: Y[i] for i in range(len(X))}
 
-
-def lagrange(X, Y):
-    res = []
-    def denominator(X, n):
-        res = 1
-        for i in range(len(X)):
-            if i == n:
-                continue
-            res *= (X[n] - X[i])
-        return res
-
-    # for i in range(len(X)):
-
